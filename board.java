@@ -52,5 +52,7 @@ public class board {
         }
     } // printBoard
 
-    
+    public int shiftRight() {
+        return 1;
+    }
 }
