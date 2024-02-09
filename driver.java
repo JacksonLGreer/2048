@@ -5,6 +5,8 @@ public class driver {
         b1.printBoard();
         b1.addRandom();
 
+        b1.addRandom();
+        
         System.out.println();
 
         b1.printBoard();
