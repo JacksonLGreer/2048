@@ -10,6 +10,7 @@ public class board {
             for (int j = 0; j < 4; j++) {
                 cells[i][j] = new cell();
                 cells[i][j].val = 0;
+                cells[i][j].filled = false;
             }
         }
     } // board
@@ -51,6 +52,22 @@ public class board {
             System.out.println();
         }
     } // printBoard
+
+    public Boolean filled() {
+        int check = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (cells[i][j].val != 0) {
+                    check++;
+                }
+            }
+        }
+        if (check == 16) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public int shiftRight() {
         return 1;
