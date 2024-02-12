@@ -4,8 +4,8 @@ public class driver {
         board b1 = new board();
         b1.printBoard();
         Boolean loop = false;
-        System.out.println(b1.filled());
         
+
         
         while (loop == false) {
             System.out.println();

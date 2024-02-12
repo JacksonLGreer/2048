@@ -4,8 +4,10 @@ public class board {
     
     cell cells[][] = new cell[4][4];
 
+    /**
+     * Board constructor fills cells with 0
+     */
     public board() {
-
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 cells[i][j] = new cell();
@@ -15,6 +17,10 @@ public class board {
         }
     } // board
 
+    /**
+     * Generate random number 0 - 4
+     * @return random num
+     */
     public int random() {
         return (int) ((Math.random() * (4-0)) + 0);
     } // random
@@ -44,6 +50,9 @@ public class board {
         return 1;
     } // addRandom
 
+    /**
+     * Prints the board in a 4x4 grid.
+     */
     public void printBoard() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -53,6 +62,10 @@ public class board {
         }
     } // printBoard
 
+    /**
+     * Checks if the board is completely full.
+     * @return true or false if full or not
+     */
     public Boolean filled() {
         int check = 0;
         for (int i = 0; i < 4; i++) {
@@ -69,12 +82,54 @@ public class board {
         }
     }
 
+    /**
+     * Shift board right 
+     * @return 1 on success
+     */
     public int shiftRight() {
-        
+        int ret = 0;
+        int farRight = 3;
         for (int i = 0; i < 4; i++) { //four rows
-            
+            if (this.rowFull(i) == -1) { // if row is empty nothing has to be done
+                ret = 1;
+            } else if (this.rowFull(i) == 1) { // row is filled
+                
+            } else { // row is partially filled
+
+            }
         }
         
         return 1;
     }
+
+    /**
+     * Checks if the cell to the right of the xy coord is full
+     * @param x - row
+     * @param y - col
+     * @return 0 if empty, 1 if full
+     */
+    public int checkRight(int x, int y) {
+        int ret = 0;
+        if (this.cells[x][y+1].val > 0) {
+            ret = 1;
+        }
+        return ret;
+    }
+
+    /**
+     * Checks if a row is full.
+     * @param row - the row to be examined
+     * @return -1 if empty, 0 if not full, 1 if full
+     */
+    public int rowFull(int row) {
+        int ret = 0;
+        if (cells[row][0].val == 0 && cells[row][1].val == 0 && cells[row][2].val == 0 && cells[row][3].val == 0) {
+            ret = -1; // empty row
+        } else if (cells[row][0].val > 0 && cells[row][1].val > 0 && cells[row][2].val > 0 && cells[row][3].val > 0) {
+            ret = 1; // full row
+        } else {
+            ret = 0; // partially full
+        }
+        return ret;
+    } // rowFull
 }
