@@ -70,6 +70,11 @@ public class board {
     }
 
     public int shiftRight() {
+        
+        for (int i = 0; i < 4; i++) { //four rows
+            
+        }
+        
         return 1;
     }
 }
