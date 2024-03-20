@@ -106,11 +106,13 @@ public class board {
      * Checks if the cell to the right of the xy coord is full
      * @param x - row
      * @param y - col
-     * @return 0 if empty, 1 if full
+     * @return 0 if empty, 1 if full, 2 if on right edge
      */
     public int checkRight(int x, int y) {
         int ret = 0;
-        if (this.cells[x][y+1].val > 0) {
+        if (y == 3) {
+            ret = 2;
+        } else if (this.cells[x][y+1].val > 0) {
             ret = 1;
         }
         return ret;
