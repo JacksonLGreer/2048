@@ -93,7 +93,28 @@ public class board {
             if (this.rowFull(i) == -1) { // if row is empty nothing has to be done
                 ret = 1;
             } else if (this.rowFull(i) == 1) { // row is filled
-                
+                for (int j = 0; j < 3; j++) {
+                    if (cells[i][j].val == cells[i][j+1].val) { // if cell to right is equal
+                        cells[i][j].val = 0;
+                        cells[i][j].filled = false;
+                        cells[i][j+1].val = cells[i][j+1].val*2; // set left cell to 0 and empty, set right to double
+                        j++;
+                    }
+                    if (cells[i][0].filled == true && cells[i][1].filled == false) {
+                        cells[i][1].val = cells[i][0].val;
+                        cells[i][1].filled = true;
+                        cells[i][0].val = 0;
+                        cells[i][0].filled = false;
+                    } 
+                    if (cells[i][1].filled == true && cells[i][2].filled == false) {
+                        cells[i][2].val = cells[i][1].val;
+                        cells[i][2].filled = true;
+                        cells[i][1].val = 0;
+                        cells[i][1].filled = false;
+                    }
+                    
+                    
+                }
             } else { // row is partially filled
 
             }
