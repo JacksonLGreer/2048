@@ -11,6 +11,7 @@ public class driver {
             System.out.println();
             b1.addRandom();
             b1.printBoard();
+            b1.shiftRight();
             if (b1.filled() == true) {
                 loop = true;
             }
