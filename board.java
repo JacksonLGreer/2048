@@ -95,25 +95,23 @@ public class board {
             } else if (this.rowFull(i) == 1) { // row is filled
                 for (int j = 0; j < 3; j++) {
                     if (cells[i][j].val == cells[i][j+1].val) { // if cell to right is equal
+                        // first two blocks are if there is 3 in a row, else is usual case
                         if (cells[i][0].val == cells[i][1].val && cells[i][1].val == cells[i][2].val && cells[i][2].val != cells[i][3].val) {
-                            System.out.println("1");
-                            cells[i][j].val = 0;
+                            cells[i][j].val = 0; 
                             cells[i][j].filled = false;
                             cells[i][2].val = cells[i][2].val*2;
                         } else if (cells[i][1].val == cells[i][2].val && cells[i][2].val == cells[i][3].val && cells[i][1].val != cells[i][0].val) {
-                            System.out.println("2");
                             cells[i][j].val = 0;
                             cells[i][j].filled = false;
                             cells[i][3].val = cells[i][3].val*2;
                         } else {
-                            System.out.println("3");
                             cells[i][j].val = 0;
                             cells[i][j].filled = false;
                             cells[i][j+1].val = cells[i][j+1].val*2; // set left cell to 0 and empty, set right to double
-
                         }
                         j++;
                     }
+                    //fixing alignment of some cells after moving others
                     if (cells[i][0].filled == true && cells[i][1].filled == false) { 
                         cells[i][1].val = cells[i][0].val;
                         cells[i][1].filled = true;
@@ -130,7 +128,28 @@ public class board {
                     
                 }
             } else { // row is partially filled
-
+                for (int j = 3; j >= 0; j--) {
+                    if (checkRight(i,j) == 2) { // if on far edge do nothing
+                        ret = 1;
+                    } else if (checkRight(i,j) == 1 && cells[i][j].val == cells[i][j+1].val) { // if next to same num
+                        cells[i][j].val = 0;
+                        cells[i][j].filled = false;
+                        cells[i][j+1].val = cells[i][j+1].val*2;
+                    } else if (checkRight(i,j) == 1 && cells[i][j].val != cells[i][j+1].val) { //if next to different num do nothing
+                        ret = 1;
+                    } else if (checkRight(i,j) == 0) { // if next to empty cell
+                            cells[i][j+1].filled = true;
+                            cells[i][j+1].val = cells[i][j].val;
+                            cells[i][j].filled = false;
+                            cells[i][j].val = 0;
+                            if (checkRight(i,j+1) == 0) {
+                                cells[i][j+2].filled = true;
+                                cells[i][j+2].val = cells[i][j+1].val;
+                                cells[i][j+1].filled = false;
+                                cells[i][j+1].val = 0;
+                            }
+                    }
+                }
             }
         }
         
