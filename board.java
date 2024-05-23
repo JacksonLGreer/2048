@@ -156,6 +156,32 @@ public class board {
         return 1;
     }
 
+
+
+    /**
+     * Shift board right 
+     * @return 1 on success
+     */
+    public int shiftLeft() {
+        return 2;
+    }
+
+    /**
+     * Shift board down 
+     * @return 1 on success
+     */
+    public int shiftDown() {
+        return 1;
+    }
+
+    /**
+     * Shift board up 
+     * @return 1 on success
+     */
+    public int shiftUp() {
+        return 1;
+    }
+
     /**
      * Checks if the cell to the right of the xy coord is full
      * @param x - row
