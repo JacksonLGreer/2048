@@ -2,10 +2,12 @@ public class cell {
     
     int val;
     Boolean filled;
+    Boolean locked;
 
     public cell() {
         val = 0;
         filled = false;
+        locked = false;
     } // cell
 
     public Boolean fillStatus() {

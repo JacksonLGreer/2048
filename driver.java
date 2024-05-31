@@ -14,7 +14,6 @@ public class driver {
             b1.addRandom();
             b1.printBoard();
             int key = keypress();
-            System.out.println(key);
             if (key == 1) {
                 b1.shiftUp();
             } else if (key == 2) {

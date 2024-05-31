@@ -83,77 +83,47 @@ public class board {
     }
 
     /**
+     * Sets the 'locked' status of all cells to false.
+     * @return 1
+     */
+    public int lockClear() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                this.cells[i][j].locked = false;
+            }
+        }
+        return 1;
+    }
+    /**
      * Shift board right 
      * @return 1 on success
      */
     public int shiftRight() {
         int ret = 0;
-        int farRight = 3;
-        for (int i = 0; i < 4; i++) { //four rows
-            if (this.rowFull(i) == -1) { // if row is empty nothing has to be done
-                ret = 1;
-            } else if (this.rowFull(i) == 1) { // row is filled
-                for (int j = 0; j < 3; j++) {
-                    if (cells[i][j].val == cells[i][j+1].val) { // if cell to right is equal
-                        // first two blocks are if there is 3 in a row, else is usual case
-                        if (cells[i][0].val == cells[i][1].val && cells[i][1].val == cells[i][2].val && cells[i][2].val != cells[i][3].val) {
-                            cells[i][j].val = 0; 
-                            cells[i][j].filled = false;
-                            cells[i][2].val = cells[i][2].val*2;
-                        } else if (cells[i][1].val == cells[i][2].val && cells[i][2].val == cells[i][3].val && cells[i][1].val != cells[i][0].val) {
-                            cells[i][j].val = 0;
-                            cells[i][j].filled = false;
-                            cells[i][3].val = cells[i][3].val*2;
-                        } else {
-                            cells[i][j].val = 0;
-                            cells[i][j].filled = false;
-                            cells[i][j+1].val = cells[i][j+1].val*2; // set left cell to 0 and empty, set right to double
-                        }
-                        j++;
-                    }
-                    //fixing alignment of some cells after moving others
-                    if (cells[i][0].filled == true && cells[i][1].filled == false) { 
-                        cells[i][1].val = cells[i][0].val;
-                        cells[i][1].filled = true;
-                        cells[i][0].val = 0;
-                        cells[i][0].filled = false;
-                    } 
-                    if (cells[i][1].filled == true && cells[i][2].filled == false) {
-                        cells[i][2].val = cells[i][1].val;
-                        cells[i][2].filled = true;
-                        cells[i][1].val = 0;
-                        cells[i][1].filled = false;
-                    }
-                    
-                    
-                }
-            } else { // row is partially filled
-                for (int j = 3; j >= 0; j--) {
-                    if (checkRight(i,j) == 2) { // if on far edge do nothing
+        this.lockClear();
+        for (int i = 0; i < 3; i++) { // rows
+            for (int j = 3; j >= 0; j--) { // cells
+                if (checkRight(i,j) == 2) { // if 2 then on right edge, do nothing, no lock
+                    ret = 1;
+                } else if (checkRight(i,j) == 1) { // not on edge, but right is filled
+                    if (this.cells[i][j+1].val == this.cells[i][j].val && this.cells[i][j+1].locked == false) { // two next to each other are equal
+                        this.cells[i][j+1].val *= 2; // double right
+                        this.cells[i][j].val = 0; // left equal 0
+                        this.cells[i][j].filled = false; // left is empty
+                        this.cells[i][j+1].locked = true; // right is locked
+                    } else { // two are not equal, do nothing
                         ret = 1;
-                    } else if (checkRight(i,j) == 1 && cells[i][j].val == cells[i][j+1].val) { // if next to same num
-                        cells[i][j].val = 0;
-                        cells[i][j].filled = false;
-                        cells[i][j+1].val = cells[i][j+1].val*2;
-                    } else if (checkRight(i,j) == 1 && cells[i][j].val != cells[i][j+1].val) { //if next to different num do nothing
-                        ret = 1;
-                    } else if (checkRight(i,j) == 0) { // if next to empty cell
-                            cells[i][j+1].filled = true;
-                            cells[i][j+1].val = cells[i][j].val;
-                            cells[i][j].filled = false;
-                            cells[i][j].val = 0;
-                            if (checkRight(i,j+1) == 0) {
-                                cells[i][j+2].filled = true;
-                                cells[i][j+2].val = cells[i][j+1].val;
-                                cells[i][j+1].filled = false;
-                                cells[i][j+1].val = 0;
-                            }
                     }
+                } else if (checkRight(i,j) == 0) {
+                    this.cells[i][j+1].val = this.cells[i][j].val; // set right to left
+                    this.cells[i][j+1].filled = true; // set right to filled
+                    this.cells[i][j].val = 0; // set left to 0 and empty
+                    this.cells[i][j].filled = false;
                 }
+
             }
         }
-        
-        return 1;
+        return ret;
     }
 
 
