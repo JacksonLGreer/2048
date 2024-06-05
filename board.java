@@ -143,27 +143,141 @@ public class board {
 
 
     /**
-     * Shift board right 
+     * Shift board left 
      * @return 1 on success
      */
     public int shiftLeft() {
-        return 2;
+        int ret = 0;
+        this.lockClear();
+        for (int i = 3; i >= 0; i--) { // rows
+            for (int j = 0; j <= 3; j++) { // cells
+                if (checkLeft(i,j) == 2) { // if 2 then on left edge, do nothing, no lock
+                    ret = 1;
+                } else if (checkLeft(i,j) == 1) { // not on edge, but left is filled
+                    if (this.cells[i][j-1].val == this.cells[i][j].val && this.cells[i][j-1].locked == false) { // two next to each other are equal
+                        this.cells[i][j-1].val *= 2; // double right
+                        this.cells[i][j].val = 0; // left equal 0
+                        this.cells[i][j].filled = false; // left is empty
+                        this.cells[i][j-1].locked = true; // right is locked
+                    } else { // two are not equal, do nothing
+                        ret = 1;
+                    }
+                } else if (checkLeft(i,j) == 0) {
+                    int t = 0; // counter for movement
+                    while (checkLeft(i,j-t) == 0) {
+                        this.cells[i][j-1-t].val = this.cells[i][j-t].val; // set right to left
+                        this.cells[i][j-1-t].filled = true; // set right to filled
+                        this.cells[i][j-t].val = 0; // set left to 0 and empty
+                        this.cells[i][j-t].filled = false;
+                        t++;
+                        if (checkLeft(i,j-t) == 1) { // copy of right being filled, makes sure two numbers with space between can merge
+                            if (this.cells[i][j-1-t].val == this.cells[i][j-t].val && this.cells[i][j-1-t].locked == false) { // two next to each other are equal
+                                this.cells[i][j-1-t].val *= 2; // double right
+                                this.cells[i][j-t].val = 0; // left equal 0
+                                this.cells[i][j-t].filled = false; // left is empty
+                                this.cells[i][j-1-t].locked = true; // right is locked
+                            } else { // two are not equal, do nothing
+                                ret = 1;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return ret;
     }
 
-    /**
+        /**
      * Shift board down 
      * @return 1 on success
      */
     public int shiftDown() {
-        return 1;
+        int ret = 0;
+        this.lockClear();
+        for (int j = 0; j <= 3; j++) { // rows
+            for (int i = 0; i <= 3; i++) { // cells
+                if (checkDown(i,j) == 2) { // if 2 then on right edge, do nothing, no lock
+                    ret = 1;
+                } else if (checkDown(i,j) == 1) { // not on edge, but right is filled
+                    if (this.cells[i+1][j].val == this.cells[i][j].val && this.cells[i+1][j].locked == false) { // two next to each other are equal
+                        this.cells[i+1][j].val *= 2; // double right
+                        this.cells[i][j].val = 0; // left equal 0
+                        this.cells[i][j].filled = false; // left is empty
+                        this.cells[i+1][j].locked = true; // right is locked
+                    } else { // two are not equal, do nothing
+                        ret = 1;
+                    }
+                } else if (checkDown(i,j) == 0) {
+                    int t = 0; // counter for movement
+                    while (checkDown(i+t,j) == 0) {
+                        this.cells[i+1+t][j].val = this.cells[i+t][j].val; // set right to left
+                        this.cells[i+1+t][j].filled = true; // set right to filled
+                        this.cells[i+t][j].val = 0; // set left to 0 and empty
+                        this.cells[i+t][j].filled = false;
+                        t++;
+                        if (checkDown(i+t,j) == 1) { // copy of right being filled, makes sure two numbers with space between can merge
+                            if (this.cells[i+1+t][j].val == this.cells[i+t][j].val && this.cells[i+1+t][j].locked == false) { // two next to each other are equal
+                                this.cells[i+1+t][j].val *= 2; // double right
+                                this.cells[i+t][j].val = 0; // left equal 0
+                                this.cells[i+t][j].filled = false; // left is empty
+                                this.cells[i+1+t][j].locked = true; // right is locked
+                            } else { // two are not equal, do nothing
+                                ret = 1;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return ret;
     }
 
-    /**
-     * Shift board up 
+      /**
+     * Shift board down 
      * @return 1 on success
      */
     public int shiftUp() {
-        return 1;
+        int ret = 0;
+        this.lockClear();
+        for (int j = 3; j >= 0; j--) { // rows
+            for (int i = 3; i >= 0; i--) { // cells
+                if (checkUp(i,j) == 2) { // if 2 then on right edge, do nothing, no lock
+                    ret = 1;
+                } else if (checkUp(i,j) == 1) { // not on edge, but right is filled
+                    if (this.cells[i-1][j].val == this.cells[i][j].val && this.cells[i-1][j].locked == false) { // two next to each other are equal
+                        this.cells[i-1][j].val *= 2; // double right
+                        this.cells[i][j].val = 0; // left equal 0
+                        this.cells[i][j].filled = false; // left is empty
+                        this.cells[i-1][j].locked = true; // right is locked
+                    } else { // two are not equal, do nothing
+                        ret = 1;
+                    }
+                } else if (checkUp(i,j) == 0) {
+                    int t = 0; // counter for movement
+                    while (checkUp(i-t,j) == 0) {
+                        this.cells[i-1-t][j].val = this.cells[i-t][j].val; // set right to left
+                        this.cells[i-1-t][j].filled = true; // set right to filled
+                        this.cells[i-t][j].val = 0; // set left to 0 and empty
+                        this.cells[i-t][j].filled = false;
+                        t++;
+                        if (checkUp(i-t,j) == 1) { // copy of right being filled, makes sure two numbers with space between can merge
+                            if (this.cells[i-1-t][j].val == this.cells[i-t][j].val && this.cells[i-1-t][j].locked == false) { // two next to each other are equal
+                                this.cells[i-1-t][j].val *= 2; // double right
+                                this.cells[i-t][j].val = 0; // left equal 0
+                                this.cells[i-t][j].filled = false; // left is empty
+                                this.cells[i-1-t][j].locked = true; // right is locked
+                            } else { // two are not equal, do nothing
+                                ret = 1;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return ret;
     }
 
     /**
@@ -177,6 +291,54 @@ public class board {
         if (y == 3) {
             ret = 2;
         } else if (this.cells[x][y+1].val > 0) {
+            ret = 1;
+        }
+        return ret;
+    }
+
+    /**
+     * Checks if the cell to the left of the xy coord is full
+     * @param x - row
+     * @param y - col
+     * @return 0 if empty, 1 if full, 2 if on left edge
+     */
+    public int checkLeft(int x, int y) {
+        int ret = 0;
+        if (y == 0) {
+            ret = 2;
+        } else if (this.cells[x][y-1].val > 0) {
+            ret = 1;
+        }
+        return ret;
+    }
+
+    /**
+     * Checks if the cell to the up of the xy coord is full
+     * @param x - row
+     * @param y - col
+     * @return 0 if empty, 1 if full, 2 if on top edge
+     */
+    public int checkUp(int x, int y) {
+        int ret = 0;
+        if (x == 0) {
+            ret = 2;
+        } else if (this.cells[x-1][y].val > 0) {
+            ret = 1;
+        }
+        return ret;
+    }
+
+    /**
+     * Checks if the cell to the bottom of the xy coord is full
+     * @param x - row
+     * @param y - col
+     * @return 0 if empty, 1 if full, 2 if on bottom edge
+     */
+    public int checkDown(int x, int y) {
+        int ret = 0;
+        if (x == 3) {
+            ret = 2;
+        } else if (this.cells[x+1][y].val > 0) {
             ret = 1;
         }
         return ret;
