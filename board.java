@@ -101,7 +101,7 @@ public class board {
     public int shiftRight() {
         int ret = 0;
         this.lockClear();
-        for (int i = 0; i < 3; i++) { // rows
+        for (int i = 0; i <= 3; i++) { // rows
             for (int j = 3; j >= 0; j--) { // cells
                 if (checkRight(i,j) == 2) { // if 2 then on right edge, do nothing, no lock
                     ret = 1;
@@ -115,10 +115,24 @@ public class board {
                         ret = 1;
                     }
                 } else if (checkRight(i,j) == 0) {
-                    this.cells[i][j+1].val = this.cells[i][j].val; // set right to left
-                    this.cells[i][j+1].filled = true; // set right to filled
-                    this.cells[i][j].val = 0; // set left to 0 and empty
-                    this.cells[i][j].filled = false;
+                    int t = 0; // counter for movement
+                    while (checkRight(i,j+t) == 0) {
+                        this.cells[i][j+1+t].val = this.cells[i][j+t].val; // set right to left
+                        this.cells[i][j+1+t].filled = true; // set right to filled
+                        this.cells[i][j+t].val = 0; // set left to 0 and empty
+                        this.cells[i][j+t].filled = false;
+                        t++;
+                        if (checkRight(i,j+t) == 1) { // copy of right being filled, makes sure two numbers with space between can merge
+                            if (this.cells[i][j+1+t].val == this.cells[i][j+t].val && this.cells[i][j+1+t].locked == false) { // two next to each other are equal
+                                this.cells[i][j+1+t].val *= 2; // double right
+                                this.cells[i][j+t].val = 0; // left equal 0
+                                this.cells[i][j+t].filled = false; // left is empty
+                                this.cells[i][j+1+t].locked = true; // right is locked
+                            } else { // two are not equal, do nothing
+                                ret = 1;
+                            }
+                        }
+                    }
                 }
 
             }
