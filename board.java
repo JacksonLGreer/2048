@@ -110,6 +110,7 @@ public class board {
                         this.cells[i][j+1].val *= 2; // double right
                         this.cells[i][j].val = 0; // left equal 0
                         this.cells[i][j].filled = false; // left is empty
+                        this.cells[i][j+1].filled = true; // right is full
                         this.cells[i][j+1].locked = true; // right is locked
                     } else { // two are not equal, do nothing
                         ret = 1;
@@ -127,18 +128,19 @@ public class board {
                                 this.cells[i][j+1+t].val *= 2; // double right
                                 this.cells[i][j+t].val = 0; // left equal 0
                                 this.cells[i][j+t].filled = false; // left is empty
+                                this.cells[i][j+1+t].filled = true; // right is full
                                 this.cells[i][j+1+t].locked = true; // right is locked
                             } else { // two are not equal, do nothing
                                 ret = 1;
-                            }
-                        }
-                    }
-                }
+                            } // ifelse
+                        } // if
+                    } // while
+                } // ifelse
 
-            }
-        }
+            } // for
+        } // for
         return ret;
-    }
+    } //shiftRight
 
 
 
@@ -155,38 +157,40 @@ public class board {
                     ret = 1;
                 } else if (checkLeft(i,j) == 1) { // not on edge, but left is filled
                     if (this.cells[i][j-1].val == this.cells[i][j].val && this.cells[i][j-1].locked == false) { // two next to each other are equal
-                        this.cells[i][j-1].val *= 2; // double right
-                        this.cells[i][j].val = 0; // left equal 0
-                        this.cells[i][j].filled = false; // left is empty
-                        this.cells[i][j-1].locked = true; // right is locked
+                        this.cells[i][j-1].val *= 2; // double left
+                        this.cells[i][j].val = 0; // right equal 0
+                        this.cells[i][j].filled = false; // right is empty
+                        this.cells[i][j-1].filled = true; // left is full
+                        this.cells[i][j-1].locked = true; // left is locked
                     } else { // two are not equal, do nothing
                         ret = 1;
                     }
                 } else if (checkLeft(i,j) == 0) {
                     int t = 0; // counter for movement
                     while (checkLeft(i,j-t) == 0) {
-                        this.cells[i][j-1-t].val = this.cells[i][j-t].val; // set right to left
-                        this.cells[i][j-1-t].filled = true; // set right to filled
-                        this.cells[i][j-t].val = 0; // set left to 0 and empty
+                        this.cells[i][j-1-t].val = this.cells[i][j-t].val; // set left to right
+                        this.cells[i][j-1-t].filled = true; // set left to filled
+                        this.cells[i][j-t].val = 0; // set right to 0 and empty
                         this.cells[i][j-t].filled = false;
                         t++;
-                        if (checkLeft(i,j-t) == 1) { // copy of right being filled, makes sure two numbers with space between can merge
+                        if (checkLeft(i,j-t) == 1) { // copy of left being filled, makes sure two numbers with space between can merge
                             if (this.cells[i][j-1-t].val == this.cells[i][j-t].val && this.cells[i][j-1-t].locked == false) { // two next to each other are equal
-                                this.cells[i][j-1-t].val *= 2; // double right
-                                this.cells[i][j-t].val = 0; // left equal 0
-                                this.cells[i][j-t].filled = false; // left is empty
-                                this.cells[i][j-1-t].locked = true; // right is locked
+                                this.cells[i][j-1-t].val *= 2; // double left
+                                this.cells[i][j-t].val = 0; // right equal 0
+                                this.cells[i][j-t].filled = false; // right is empty
+                                this.cells[i][j-1-t].filled = true; // left is full
+                                this.cells[i][j-1-t].locked = true; // left is locked
                             } else { // two are not equal, do nothing
                                 ret = 1;
-                            }
-                        }
-                    }
-                }
+                            } // ifelse
+                        } // if
+                    } // while
+                }// ifelse
 
-            }
-        }
+            } // for
+        } // for
         return ret;
-    }
+    } // shiftLeft
 
         /**
      * Shift board down 
@@ -195,33 +199,35 @@ public class board {
     public int shiftDown() {
         int ret = 0;
         this.lockClear();
-        for (int j = 0; j <= 3; j++) { // rows
+        for (int j = 0; j <= 3; j++) { // columns
             for (int i = 0; i <= 3; i++) { // cells
-                if (checkDown(i,j) == 2) { // if 2 then on right edge, do nothing, no lock
+                if (checkDown(i,j) == 2) { // if 2 then on bottom edge, do nothing, no lock
                     ret = 1;
-                } else if (checkDown(i,j) == 1) { // not on edge, but right is filled
+                } else if (checkDown(i,j) == 1) { // not on edge, but bottom is filled
                     if (this.cells[i+1][j].val == this.cells[i][j].val && this.cells[i+1][j].locked == false) { // two next to each other are equal
-                        this.cells[i+1][j].val *= 2; // double right
-                        this.cells[i][j].val = 0; // left equal 0
-                        this.cells[i][j].filled = false; // left is empty
-                        this.cells[i+1][j].locked = true; // right is locked
+                        this.cells[i+1][j].val *= 2; // double bottom
+                        this.cells[i][j].val = 0; // top equal 0
+                        this.cells[i][j].filled = false; // top is empty
+                        this.cells[i+1][j].filled = true; // bottom is full
+                        this.cells[i+1][j].locked = true; // bottom is locked
                     } else { // two are not equal, do nothing
                         ret = 1;
                     }
                 } else if (checkDown(i,j) == 0) {
                     int t = 0; // counter for movement
                     while (checkDown(i+t,j) == 0) {
-                        this.cells[i+1+t][j].val = this.cells[i+t][j].val; // set right to left
-                        this.cells[i+1+t][j].filled = true; // set right to filled
-                        this.cells[i+t][j].val = 0; // set left to 0 and empty
+                        this.cells[i+1+t][j].val = this.cells[i+t][j].val; // set bottom to top
+                        this.cells[i+1+t][j].filled = true; // set bottom to filled
+                        this.cells[i+t][j].val = 0; // set top to 0 and empty
                         this.cells[i+t][j].filled = false;
                         t++;
-                        if (checkDown(i+t,j) == 1) { // copy of right being filled, makes sure two numbers with space between can merge
+                        if (checkDown(i+t,j) == 1) { // copy of bottom being filled, makes sure two numbers with space between can merge
                             if (this.cells[i+1+t][j].val == this.cells[i+t][j].val && this.cells[i+1+t][j].locked == false) { // two next to each other are equal
-                                this.cells[i+1+t][j].val *= 2; // double right
-                                this.cells[i+t][j].val = 0; // left equal 0
-                                this.cells[i+t][j].filled = false; // left is empty
-                                this.cells[i+1+t][j].locked = true; // right is locked
+                                this.cells[i+1+t][j].val *= 2; // double bottom
+                                this.cells[i+t][j].val = 0; // top equal 0
+                                this.cells[i+t][j].filled = false; // top is empty
+                                this.cells[i+1+t][j].filled = true; // bottom is full
+                                this.cells[i+1+t][j].locked = true; // bottom is locked
                             } else { // two are not equal, do nothing
                                 ret = 1;
                             }
@@ -241,33 +247,35 @@ public class board {
     public int shiftUp() {
         int ret = 0;
         this.lockClear();
-        for (int j = 3; j >= 0; j--) { // rows
+        for (int j = 3; j >= 0; j--) { // columns
             for (int i = 3; i >= 0; i--) { // cells
-                if (checkUp(i,j) == 2) { // if 2 then on right edge, do nothing, no lock
+                if (checkUp(i,j) == 2) { // if 2 then on top edge, do nothing, no lock
                     ret = 1;
-                } else if (checkUp(i,j) == 1) { // not on edge, but right is filled
+                } else if (checkUp(i,j) == 1) { // not on edge, but top is filled
                     if (this.cells[i-1][j].val == this.cells[i][j].val && this.cells[i-1][j].locked == false) { // two next to each other are equal
-                        this.cells[i-1][j].val *= 2; // double right
-                        this.cells[i][j].val = 0; // left equal 0
-                        this.cells[i][j].filled = false; // left is empty
-                        this.cells[i-1][j].locked = true; // right is locked
+                        this.cells[i-1][j].val *= 2; // double top
+                        this.cells[i][j].val = 0; // bottom equal 0
+                        this.cells[i][j].filled = false; // bottom is empty
+                        this.cells[i-1][j].filled = true; // top is filled
+                        this.cells[i-1][j].locked = true; // top is locked
                     } else { // two are not equal, do nothing
                         ret = 1;
                     }
                 } else if (checkUp(i,j) == 0) {
                     int t = 0; // counter for movement
                     while (checkUp(i-t,j) == 0) {
-                        this.cells[i-1-t][j].val = this.cells[i-t][j].val; // set right to left
-                        this.cells[i-1-t][j].filled = true; // set right to filled
-                        this.cells[i-t][j].val = 0; // set left to 0 and empty
+                        this.cells[i-1-t][j].val = this.cells[i-t][j].val; // set top to bottom
+                        this.cells[i-1-t][j].filled = true; // set top to filled
+                        this.cells[i-t][j].val = 0; // set bottom to 0 and empty
                         this.cells[i-t][j].filled = false;
                         t++;
-                        if (checkUp(i-t,j) == 1) { // copy of right being filled, makes sure two numbers with space between can merge
+                        if (checkUp(i-t,j) == 1) { // copy of top being filled, makes sure two numbers with space between can merge
                             if (this.cells[i-1-t][j].val == this.cells[i-t][j].val && this.cells[i-1-t][j].locked == false) { // two next to each other are equal
-                                this.cells[i-1-t][j].val *= 2; // double right
-                                this.cells[i-t][j].val = 0; // left equal 0
-                                this.cells[i-t][j].filled = false; // left is empty
-                                this.cells[i-1-t][j].locked = true; // right is locked
+                                this.cells[i-1-t][j].val *= 2; // double top
+                                this.cells[i-t][j].val = 0; // bottom equal 0
+                                this.cells[i-t][j].filled = false; // bottom is empty
+                                this.cells[i-1-t][j].filled = true; // top is locked
+                                this.cells[i-1-t][j].locked = true; // top is locked
                             } else { // two are not equal, do nothing
                                 ret = 1;
                             }
